@@ -81,6 +81,16 @@ export async function craftRecipe(bot, itemName, num=1) {
         return false;
     }
 
+    const recipe = recipes[0];
+    console.log('crafting...');
+    await bot.craft(recipe, num, craftingTable);
+    log(bot, `Successfully crafted ${itemName}, you now have ${world.getInventoryCounts(bot)[itemName]} ${itemName}.`);
+    if (placedTable) {
+        await collectBlock(bot, 'crafting_table', 1);
+    }
+    return true;
+}
+
 export async function craftItem(bot, itemName, num=1) {
     /**
      * Attempt to craft the given item name from a recipe. May craft many items.
@@ -88,7 +98,7 @@ export async function craftItem(bot, itemName, num=1) {
      * @param {string} itemName, the item name to craft.
      * @returns {Promise<boolean>} true if the recipe was crafted, false otherwise.
      * @example
-     * await skills.craftItem(bot, "stick");
+     * await skills.craftRecipe(bot, "stick");
      **/
     let placedTable = false;
 
@@ -128,6 +138,7 @@ export async function craftItem(bot, itemName, num=1) {
         }
         return false;
     }
+
     const recipe = recipes[0];
     console.log('crafting...');
     await bot.craft(recipe, num, craftingTable);
@@ -137,7 +148,6 @@ export async function craftItem(bot, itemName, num=1) {
     }
     return true;
 }
-
 
 export async function smeltItem(bot, itemName, num=1) {
     /**
@@ -530,27 +540,6 @@ export async function breakBlockAt(bot, x, y, z) {
 
 
 export async function placeBlock(bot, blockType, x, y, z, placeOn='bottom', dontCheat=false) {
-    /**
-     * Place the given block type at the given position. It will build off from any adjacent blocks. Will fail if there is a block in the way or nothing to build off of.
-     * @param {MinecraftBot} bot, reference to the minecraft bot.
-     * @param {string} blockType, the type of block to place.
-     * @param {number} x, the x coordinate of the block to place.
-     * @param {number} y, the y coordinate of the block to place.
-     * @param {number} z, the z coordinate of the block to place.
-     * @param {string} placeOn, the preferred side of the block to place on. Can be 'top', 'bottom', 'north', 'south', 'east', 'west', or 'side'. Defaults to bottom. Will place on first available side if not possible.
-     * @param {boolean} dontCheat, overrides cheat mode to place the block normally. Defaults to false.
-     * @returns {Promise<boolean>} true if the block was placed, false otherwise.
-     * @example
-     * let p = world.getPosition(bot);
-     * await skills.placeBlock(bot, "oak_log", p.x + 2, p.y, p.x);
-     * await skills.placeBlock(bot, "torch", p.x + 1, p.y, p.x, 'side');
-     **/
-    if (!mc.getBlockId(blockType)) {
-        log(bot, `Invalid block type: ${blockType}.`);
-        return false;
-    }
-
-export async function placeItem(bot, blockType, x, y, z, placeOn='bottom', dontCheat=false) {
     /**
      * Place the given block type at the given position. It will build off from any adjacent blocks. Will fail if there is a block in the way or nothing to build off of.
      * @param {MinecraftBot} bot, reference to the minecraft bot.

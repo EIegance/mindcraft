@@ -550,6 +550,27 @@ export async function placeBlock(bot, blockType, x, y, z, placeOn='bottom', dont
         return false;
     }
 
+export async function placeItem(bot, blockType, x, y, z, placeOn='bottom', dontCheat=false) {
+    /**
+     * Place the given block type at the given position. It will build off from any adjacent blocks. Will fail if there is a block in the way or nothing to build off of.
+     * @param {MinecraftBot} bot, reference to the minecraft bot.
+     * @param {string} blockType, the type of block to place.
+     * @param {number} x, the x coordinate of the block to place.
+     * @param {number} y, the y coordinate of the block to place.
+     * @param {number} z, the z coordinate of the block to place.
+     * @param {string} placeOn, the preferred side of the block to place on. Can be 'top', 'bottom', 'north', 'south', 'east', 'west', or 'side'. Defaults to bottom. Will place on first available side if not possible.
+     * @param {boolean} dontCheat, overrides cheat mode to place the block normally. Defaults to false.
+     * @returns {Promise<boolean>} true if the block was placed, false otherwise.
+     * @example
+     * let p = world.getPosition(bot);
+     * await skills.placeBlock(bot, "oak_log", p.x + 2, p.y, p.x);
+     * await skills.placeBlock(bot, "torch", p.x + 1, p.y, p.x, 'side');
+     **/
+    if (!mc.getBlockId(blockType)) {
+        log(bot, `Invalid block type: ${blockType}.`);
+        return false;
+    }
+
     const target_dest = new Vec3(Math.floor(x), Math.floor(y), Math.floor(z));
     if (bot.modes.isOn('cheat') && !dontCheat) {
         // invert the facing direction

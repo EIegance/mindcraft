@@ -81,6 +81,53 @@ export async function craftRecipe(bot, itemName, num=1) {
         return false;
     }
 
+export async function craftItem(bot, itemName, num=1) {
+    /**
+     * Attempt to craft the given item name from a recipe. May craft many items.
+     * @param {MinecraftBot} bot, reference to the minecraft bot.
+     * @param {string} itemName, the item name to craft.
+     * @returns {Promise<boolean>} true if the recipe was crafted, false otherwise.
+     * @example
+     * await skills.craftItem(bot, "stick");
+     **/
+    let placedTable = false;
+
+    // get recipes that don't require a crafting table
+    let recipes = bot.recipesFor(mc.getItemId(itemName), null, 1, null); 
+    let craftingTable = null;
+    if (!recipes || recipes.length === 0) {
+
+        // Look for crafting table
+        craftingTable = world.getNearestBlock(bot, 'crafting_table', 8);
+        if (craftingTable === null){
+
+            // Try to place crafting table
+            let hasTable = world.getInventoryCounts(bot)['crafting_table'] > 0;
+            if (hasTable) {
+                let pos = world.getNearestFreeSpace(bot, 1, 6);
+                await placeBlock(bot, 'crafting_table', pos.x, pos.y, pos.z);
+                craftingTable = world.getNearestBlock(bot, 'crafting_table', 8);
+                if (craftingTable) {
+                    recipes = bot.recipesFor(mc.getItemId(itemName), null, 1, craftingTable);
+                    placedTable = true;
+                }
+            }
+            else {
+                log(bot, `You either do not have enough resources to craft ${itemName} or it requires a crafting table.`)
+                return false;
+            }
+        }
+        else {
+            recipes = bot.recipesFor(mc.getItemId(itemName), null, 1, craftingTable);
+        }
+    }
+    if (!recipes || recipes.length === 0) {
+        log(bot, `You do not have the resources to craft a ${itemName}.`);
+        if (placedTable) {
+            await collectBlock(bot, 'crafting_table', 1);
+        }
+        return false;
+    }
     const recipe = recipes[0];
     console.log('crafting...');
     await bot.craft(recipe, num, craftingTable);

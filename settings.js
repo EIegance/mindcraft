@@ -6,13 +6,13 @@ export default
     "auth": "offline", // or "microsoft"
     
     "profiles": [
-        "./andy.json",
+        "./andy_wip.json",
         // add more profiles here, check ./profiles/ for more
         // more than 1 profile will require you to /msg each bot indivually
     ],
     "load_memory": false, // load memory from previous session
     "init_message": "Say hello world and your name", // sends to all on spawn
-    "allow_insecure_coding": false, // disable at own risk
-    "code_timeout_mins": 10, // -1 for no timeout
+    "allow_insecure_coding": true, // enable at own risk
+    "code_timeout_mins": -1, // -1 for no timeout
     "verbose_commands": true, // show full command syntax
 }

@@ -5,9 +5,6 @@ Attempting to improve Local LLM performance and reduce costs for api users.
 Allow small models to call onto a library of successful example code blocks from GPT and Claude, specifically when executing newAction. To reduce hallucination and increase successful generations without overloading the context length.
 
 Optimizing/Altering the default profile for smaller models. Adjusting wording, adding examples, removing examples that confuse the small models, duplicating fuctions with names that the smaller models often hallucinate (Example: duplicating craftRecipe as craftItem)
-
-Attempt to allow automatic switching to another model when struggling with newAction. Example: Using Llama-3.1-8b for most tasks but utilizing GPT4o-Mini(Or a large Local Model) after failing newAction mutilple times.
-
 *Ps, Working with the self-prompt branch*
 
 # Mindcraft 🧠⛏️
